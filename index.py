@@ -285,36 +285,15 @@ def get_wall(wall_id):
         return jsonify({'error': 'Erreur lors de la récupération du mur'}), 500
     
 
-def init_db_sequences():
-    with app.app_context():
-        try:
-            # Créer la séquence si elle n'existe pas
-            db.session.execute(text("""
-                DO $$
-                BEGIN
-                    IF NOT EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'user_id_seq') THEN
-                        CREATE SEQUENCE user_id_seq START 1;
-                    END IF;
-                END $$;
-            """))
-            # Réinitialiser la séquence
-            db.session.execute(text("""
-                SELECT setval('user_id_seq', COALESCE((SELECT MAX(id) FROM "User"), 0) + 1, false);
-            """))
-            db.session.commit()
-            print("Séquences de la base de données initialisées avec succès")
-        except Exception as e:
-            print(f"Erreur lors de l'initialisation des séquences: {e}")
-            db.session.rollback()
-
-if __name__ ==  '__main__':
+def init_db():
     with app.app_context():
         try:
             db.create_all()
             print("Tables de la base de données créées avec succès")
-            init_db_sequences()
         except Exception as e:
             print(f"Erreur lors de la création des tables: {e}")
+            raise e
 
-    
-    app.run(debug = True, host = '0.0.0.0')
+if __name__ ==  '__main__':
+    init_db()
+    app.run(debug=True, host='0.0.0.0')

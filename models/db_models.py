@@ -2,7 +2,7 @@ from database import db
 
 class User(db.Model):
     __tablename__ = 'User'
-    id = db.Column(db.Integer, db.Sequence('user_id_seq', start=1, increment=1), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Text, nullable=False)
     password = db.Column(db.Text, nullable=False)
     pp_url = db.Column(db.Text)
@@ -64,7 +64,7 @@ class Place(db.Model):
 
 class Wall(db.Model):
     __tablename__ = 'Wall'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     place_id = db.Column(db.Integer, db.ForeignKey('Place.id'), nullable=False)
     picture_url = db.Column(db.Text, nullable=False)
     name = db.Column(db.Text, nullable=False)
@@ -75,7 +75,6 @@ class Wall(db.Model):
     @classmethod
     def fromMap(cls, data):
         return cls(
-            id=data.get('id'),
             place_id=data['place_id'],
             picture_url=data['picture_url'],
             name=data['name']
@@ -113,7 +112,7 @@ class FootHold(db.Model):
 
 class Point(db.Model):
     __tablename__ = 'Point'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     route_id = db.Column(db.Integer, db.ForeignKey('Route.id'), nullable=False)
     x = db.Column(db.Float, nullable=False)
     y = db.Column(db.Float, nullable=False)
@@ -121,7 +120,6 @@ class Point(db.Model):
     @classmethod
     def fromMap(cls, data):
         return cls(
-            id=data.get('id'),
             route_id=data['route_id'],
             x=data['x'],
             y=data['y']
@@ -137,7 +135,7 @@ class Point(db.Model):
 
 class Circle(db.Model):
     __tablename__ = 'Circle'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     route_id = db.Column(db.Integer, db.ForeignKey('Route.id'), nullable=False)
     x = db.Column(db.Float, nullable=False)
     y = db.Column(db.Float, nullable=False)
@@ -147,7 +145,6 @@ class Circle(db.Model):
     @classmethod
     def fromMap(cls, data):
         return cls(
-            id=data.get('id'),
             route_id=data['route_id'],
             x=data['x'],
             y=data['y'],
@@ -168,7 +165,7 @@ class Circle(db.Model):
 class Route(db.Model):
     __tablename__ = 'Route'
     
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     grade = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
     wall_id = db.Column(db.Integer, db.ForeignKey('Wall.id'), nullable=False)
@@ -185,7 +182,6 @@ class Route(db.Model):
     @classmethod
     def fromMap(cls, data):
         return cls(
-            id=data.get('id'),
             grade=data['grade'],
             author_id=data['author_id'],
             wall_id=data['wall_id'],
